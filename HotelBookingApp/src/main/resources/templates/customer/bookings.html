@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout-main}">
+<head>
+    <title>Your Bookings</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #f8f9fa, #e3f2fd);
+        }
+
+        .page-header {
+            background: linear-gradient(to right, #0d6efd, #6610f2);
+            color: white;
+            padding: 20px;
+            border-radius: 12px 12px 0 0;
+            text-align: center;
+        }
+
+        .booking-card {
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .btn-details {
+            background: linear-gradient(to right, #0d6efd, #6610f2);
+            color: white;
+            border: none;
+        }
+
+        .btn-details:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="container my-4">
+        <div class="row justify-content-center">
+            <div class="col-md-12 booking-card">
+                <div class="page-header">
+                    <h2 class="mb-0">Your Hotel Bookings</h2>
+                </div>
+                <div class="p-4">
+                    <table class="table table-hover align-middle text-center">
+                        <thead>
+                        <tr>
+                            <th>City</th>
+                            <th>Check-In</th>
+                            <th>Check-Out</th>
+                            <th>Hotel</th>
+                            <th>Total Price</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="booking : ${bookings}">
+                            <td th:text="${booking.hotelAddress.city}"></td>
+                            <td th:text="${booking.checkinDate}"></td>
+                            <td th:text="${booking.checkoutDate}"></td>
+                            <td th:text="${booking.hotelName}"></td>
+                            <td th:text="'₹ ' + ${#numbers.formatDecimal(booking.totalPrice, 0, 'COMMA', 2, 'POINT')}"></td>
+                            <td>
+                                <a th:href="@{/customer/bookings/{id}(id=${booking.id})}" class="btn btn-details btn-sm px-3">Details</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(bookings)}">
+                            <td colspan="6" class="text-muted">No bookings found.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

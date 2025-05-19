@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout-main}">
+<head>
+    <title>Account Details</title>
+    <style>
+        .btn-gradient {
+            background: linear-gradient(to right, #0d6efd, #6610f2);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            transition: 0.3s ease;
+        }
+        .btn-gradient:hover {
+            opacity: 0.9;
+        }
+        .profile-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+        }
+        .profile-icon {
+            font-size: 4rem;
+            color: #0d6efd;
+        }
+        .detail-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div th:if="${param.success}">
+                    <div class="alert alert-success">User info successfully updated</div>
+                </div>
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white text-center rounded-top">
+                        <h2 class="mb-0">User Account Details</h2>
+                    </div>
+                    <div class="card-body profile-section">
+                        <div class="row align-items-center mb-4">
+                            <div class="col-md-3 text-center">
+                                <i class="bi bi-person-circle profile-icon"></i>
+                            </div>
+                            <div class="col-md-9">
+                                <h4 class="fw-bold text-primary mb-1" th:text="${user.username}">Username</h4>
+                                <p class="text-muted mb-0">Logged-in User</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="detail-box">
+                                    <label class="form-label text-muted">First Name</label>
+                                    <div class="fw-semibold fs-5" th:text="${user.name}">First Name</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="detail-box">
+                                    <label class="form-label text-muted">Last Name</label>
+                                    <div class="fw-semibold fs-5" th:text="${user.lastName}">Last Name</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <a th:href="@{/customer/account/edit}" class="btn btn-gradient px-4 py-2">Edit Info</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+</th:block>
+</body>
+</html>

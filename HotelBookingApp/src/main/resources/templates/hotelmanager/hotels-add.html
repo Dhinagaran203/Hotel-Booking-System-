@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout-main}">
+<head>
+    <title>Add Hotel</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #e3f2fd, #fce4ec); /* Your background gradient */
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+            padding: 20px;
+        }
+
+        .btn-gradient {
+            background: linear-gradient(to right, #0d6efd, #6610f2); /* Gradient button */
+            color: white;
+            border: none;
+            border-radius: 25px;
+            transition: 0.3s ease;
+        }
+
+        .btn-gradient:hover {
+            opacity: 0.9;
+        }
+
+        .profile-section {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .profile-icon {
+            font-size: 4rem;
+            color: #0d6efd;
+        }
+
+        .detail-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Styles for the heading */
+        .highlighted-heading {
+            color: #0d6efd; /* Blue color for the heading */
+            font-weight: 700; /* Bold text */
+            font-size: 2.5rem; /* Larger font size */
+            text-align: center; /* Center alignment */
+            margin-bottom: 30px; /* Margin below the heading */
+        }
+
+        .card {
+            background-color: #ffffff; /* White background for the card */
+            color: #333333; /* Dark text for contrast */
+            border-radius: 10px;
+            padding: 20px;
+            position: relative; /* Added for proper layering */
+        }
+
+        .card-header {
+            background-color: #ffffff; /* White background for the card header */
+            color: #0d6efd; /* Blue text for the card header */
+            border-radius: 10px 10px 0 0; /* Rounded corners for the header */
+            text-align: center;
+            padding: 25px 20px; /* Increased padding to make space for the heading */
+            font-size: 24px;
+            z-index: 1; /* Ensures the header stays on top */
+        }
+
+        /* Form layout for label and input on the same line */
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            color: #0d6efd; /* Blue color for labels */
+            font-weight: bold;
+            width: 180px; /* Fixed width to align labels */
+            margin-right: 15px; /* Space between label and input */
+        }
+
+        .form-control {
+            width: 100%; /* Allow inputs to take up the remaining space */
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            border-color: #0d6efd; /* Blue border on focus */
+            outline: none;
+        }
+
+        /* Add error message styling */
+        .text-danger {
+            font-size: 0.9rem;
+            color: #dc3545; /* Red color for error messages */
+            margin-top: 5px;
+        }
+
+        /* Submit button styling */
+        .btn-submit {
+            background: linear-gradient(to right, #0d6efd, #6610f2); /* Gradient button */
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            opacity: 0.9;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        /* Adjust each row to contain only one input field */
+        .form-group-single {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="highlighted-heading">Add New Hotel</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" th:action="@{/manager/hotels/add}" th:object="${hotel}">
+                            <!-- Hotel Name -->
+                            <div class="form-group">
+                                <label class="form-label" for="name">Hotel Name:</label>
+                                <input class="form-control" id="name" type="text" th:field="*{name}"
+                                       placeholder="Enter hotel name">
+                                <p class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+                            </div>
+
+                            <!-- Address Line -->
+                            <div class="form-group">
+                                <label class="form-label" for="addressLine">Address Line:</label>
+                                <input class="form-control" id="addressLine" type="text"
+                                       th:field="*{addressDTO.addressLine}"
+                                       placeholder="Enter address line">
+                                <p class="text-danger" th:if="${#fields.hasErrors('addressDTO.addressLine')}"
+                                   th:errors="*{addressDTO.addressLine}"></p>
+                            </div>
+
+                            <!-- City -->
+                            <div class="form-group">
+                                <label class="form-label" for="city">City:</label>
+                                <input class="form-control" id="city" type="text" th:field="*{addressDTO.city}"
+                                       placeholder="Enter city">
+                                <p class="text-danger" th:if="${#fields.hasErrors('addressDTO.city')}"
+                                   th:errors="*{addressDTO.city}"></p>
+                            </div>
+
+                            <!-- Country -->
+                            <div class="form-group">
+                                <label class="form-label" for="country">Country:</label>
+                                <input class="form-control" id="country" type="text" th:field="*{addressDTO.country}"
+                                       placeholder="Enter country">
+                                <p class="text-danger" th:if="${#fields.hasErrors('addressDTO.country')}"
+                                   th:errors="*{addressDTO.country}"></p>
+                            </div>
+
+                            <!-- Single Room Count -->
+                            <div class="form-group">
+                                <label class="form-label" for="singleRoomCount">Single Room Count:</label>
+                                <input class="form-control" id="singleRoomCount" type="number"
+                                       th:field="*{roomDTOs[0].roomCount}"
+                                       placeholder="Enter count for single rooms">
+                                <input type="hidden" th:field="*{roomDTOs[0].roomType}">
+                                <p class="text-danger" th:if="${#fields.hasErrors('roomDTOs[0].roomCount')}"
+                                   th:errors="*{roomDTOs[0].roomCount}"></p>
+                            </div>
+
+                            <!-- Single Room Price -->
+                            <div class="form-group">
+                                <label class="form-label" for="singleRoomPrice">Single Room Price (₹):</label>
+                                <input class="form-control" id="singleRoomPrice" type="number" step="0.01"
+                                       th:field="*{roomDTOs[0].pricePerNight}"
+                                       placeholder="Enter price for single rooms">
+                                <p class="text-danger" th:if="${#fields.hasErrors('roomDTOs[0].pricePerNight')}"
+                                   th:errors="*{roomDTOs[0].pricePerNight}"></p>
+                            </div>
+
+                            <!-- Double Room Count -->
+                            <div class="form-group">
+                                <label class="form-label" for="doubleRoomCount">Double Room Count:</label>
+                                <input class="form-control" id="doubleRoomCount" type="number"
+                                       th:field="*{roomDTOs[1].roomCount}"
+                                       placeholder="Enter count for double rooms">
+                                <input type="hidden" th:field="*{roomDTOs[1].roomType}">
+                                <p class="text-danger" th:if="${#fields.hasErrors('roomDTOs[1].roomCount')}"
+                                   th:errors="*{roomDTOs[1].roomCount}"></p>
+                            </div>
+
+                            <!-- Double Room Price -->
+                            <div class="form-group">
+                                <label class="form-label" for="doubleRoomPrice">Double Room Price (₹):</label>
+                                <input class="form-control" id="doubleRoomPrice" type="number" step="0.01"
+                                       th:field="*{roomDTOs[1].pricePerNight}"
+                                       placeholder="Enter price for double rooms">
+                                <p class="text-danger" th:if="${#fields.hasErrors('roomDTOs[1].pricePerNight')}"
+                                   th:errors="*{roomDTOs[1].pricePerNight}"></p>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="text-center">
+                                	<button type="submit" class="btn btn-submit">Add Hotel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

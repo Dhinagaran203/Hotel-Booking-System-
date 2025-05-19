@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout-main}">
+<head>
+    <title>Booking Details</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #e3f2fd, #fdfbfb);
+        }
+
+        .booking-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        .card-header {
+            background: linear-gradient(to right, #0d6efd, #6610f2);
+            color: white;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h5 {
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, #0d6efd, #6610f2);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .section-title {
+            margin-top: 30px;
+            font-size: 1.2rem;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 6px;
+        }
+
+        ul {
+            padding-left: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="container my-4">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="booking-card">
+                    <div class="card-header">
+                        <h2 class="mb-0">Booking Details</h2>
+                    </div>
+                    <div class="card-body mt-4">
+                        <div>
+                            <h5>Confirmation Number:</h5>
+                            <p class="mb-3" th:text="${bookingDTO.confirmationNumber}"></p>
+                        </div>
+
+                        <h3 class="section-title" th:text="${bookingDTO.hotelName}">Hotel Name</h3>
+                        <p class="text-muted" th:text="${bookingDTO.hotelAddress.addressLine + ', ' + bookingDTO.hotelAddress.city + ', ' + bookingDTO.hotelAddress.country}"></p>
+
+                        <div class="row text-center my-4">
+                            <div class="col-md-4">
+                                <h5>Check-in</h5>
+                                <p th:text="${bookingDTO.checkinDate}"></p>
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Check-out</h5>
+                                <p th:text="${bookingDTO.checkoutDate}"></p>
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Duration</h5>
+                                <p th:text="${days} + ' night(s)'"></p>
+                            </div>
+                        </div>
+
+                        <h5 class="section-title">Rooms</h5>
+                        <ul class="mb-3">
+                            <li th:each="room : ${bookingDTO.roomSelections}">
+                                <span th:text="${room.count}"></span> x <span th:text="${room.roomType}"></span>
+                            </li>
+                        </ul>
+
+                        <h5 class="section-title">Total Price</h5>
+                        <p class="mb-3" th:text="'₹ ' + ${#numbers.formatDecimal(bookingDTO.totalPrice, 1, 'COMMA', 2, 'POINT')}"></p>
+
+                        <h5 class="section-title">Payment Method</h5>
+                        <p class="mb-3" th:text="${bookingDTO.paymentMethod}"></p>
+
+                        <h5 class="section-title">Guest Details</h5>
+                        <p class="mb-2">Name: <span th:text="${bookingDTO.customerName}"></span></p>
+                        <p class="mb-3">Email: <span th:text="${bookingDTO.customerEmail}"></span></p>
+
+                        <div class="text-end mt-4">
+                            <a href="/customer/bookings" class="btn btn-primary px-4">Back to Bookings</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

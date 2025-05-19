@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout-main}">
+<head>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>Welcome | DreamStay Hotels</title>
+    <style>
+        body {
+            background-image: url('/img/bg.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #fff;
+        }
+
+        .hero-text {
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+            font-size: 2rem;
+            font-weight: 500;
+            margin-bottom: 30px;
+        }
+
+        .btn-explore {
+            font-size: 1.1rem;
+            padding: 12px 30px;
+            border-radius: 30px;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            transition: background 0.3s ease;
+        }
+
+        .btn-explore:hover {
+            background: linear-gradient(135deg, #0056b3, #004080);
+        }
+
+        .full-height-center {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="full-height-center">
+        <p class="hero-text">We make your travel plans simple and enjoyable.<br>Let's start a new journey!</p>
+        <a href="/login" class="btn btn-explore">Explore - Dream - Discover</a>
+    </div>
+    <!-- Services Section -->
+<section class="container-fluid mt-5 text-dark py-5">
+    <div class="container">
+        <div class="text-center mb-4">
+        	<h2 class="fw-bold">Our Services</h2>
+            <h4>Services at <span class="text-primary">Stay Ease</span> Hotel</h4>
+            <p class="mt-2"><i class="fas fa-clock me-2"></i>24-Hour Front Desk</p>
+        </div>
+        <hr class="border-light" />
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary"><i class="fas fa-wifi me-2"></i>WiFi</h5>
+                        <p class="card-text">Stay connected with high-speed internet access.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary"><i class="fas fa-utensils me-2"></i>Breakfast</h5>
+                        <p class="card-text">Start your day with a delicious breakfast buffet.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary"><i class="fas fa-tshirt me-2"></i>Laundry</h5>
+                        <p class="card-text">Keep your clothes clean and fresh with our laundry service.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary"><i class="fas fa-cocktail me-2"></i>Mini-bar</h5>
+                        <p class="card-text">Enjoy a refreshing drink or snack from our in-room mini-bar.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary"><i class="fas fa-parking me-2"></i>Parking</h5>
+                        <p class="card-text">Park your car conveniently in our on-site parking lot.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary"><i class="fas fa-snowflake me-2"></i>Air Conditioning</h5>
+                        <p class="card-text">Stay cool and comfortable with our air conditioning system.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="container-fluid py-5 text-dark" style="background: linear-gradient(135deg, #fbeec1, #f5f5f5);">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Contact Us</h2>
+            <p class="text-muted">We’re here to help you 24/7. Reach out to us anytime!</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <!-- Contact Info -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold mb-3">Get in Touch</h5>
+                <ul class="list-unstyled fs-5">
+                    <li><i class="fas fa-phone-alt me-2 text-primary"></i> +91 6369669078</li>
+                    <li><i class="fas fa-envelope me-2 text-primary"></i> support@stayease.com</li>
+                    <li><i class="fas fa-map-marker-alt me-2 text-primary"></i> 123 Beach Road, Chennai, India</li>
+                </ul>
+                <!-- Social Icons -->
+                <div class="mt-4">
+                    <h6 class="fw-bold">Follow Us</h6>
+                    <a href="#" class="text-dark me-3 fs-4"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-dark me-3 fs-4"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-dark me-3 fs-4"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-dark fs-4"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="col-md-6 mb-4">
+                <h5 class="fw-bold mb-3">Send Us a Message</h5>
+                <form>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="Your Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="email" class="form-control" placeholder="Your Email" required>
+                    </div>
+                    <div class="mb-3">
+                        <textarea class="form-control" rows="4" placeholder="Your Message" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</th:block>
+
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout-main}">
+<head>
+    <title>Manager's Bookings</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #e3f2fd, #fce4ec);
+            min-height: 100vh;
+        }
+        .btn-gradient {
+            background: linear-gradient(to right, #0d6efd, #6610f2);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            transition: 0.3s ease;
+        }
+        .btn-gradient:hover {
+            opacity: 0.9;
+        }
+        .table-wrapper {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+        }
+        .table th, .table td {
+            vertical-align: middle;
+        }
+        .highlighted-heading {
+            color: #0d6efd;
+            font-weight: 700;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-wrapper shadow">
+                    <h2 class="highlighted-heading">Manager's Bookings</h2>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Hotel</th>
+                            <th>Confirmation No.</th>
+                            <th>Customer</th>
+                            <th>Total Price</th>
+                            <th>Payment Status</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="align-middle" th:each="booking : ${bookings}">
+                            <td th:text="${booking.hotelName}"></td>
+                            <td th:text="${booking.confirmationNumber}"></td>
+                            <td th:text="${booking.customerName}"></td>
+                            <td th:text="'₹ ' + ${#numbers.formatDecimal(booking.totalPrice, 0, 'COMMA', 2, 'POINT')}"></td>
+                            <td th:text="${booking.paymentStatus}"></td>
+                            <td>
+                                <a th:href="@{/manager/bookings/{id}(id=${booking.id})}" class="btn btn-gradient btn-sm">Details</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

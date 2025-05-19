@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout-main}">
+<head>
+    <title>Edit My Hotel</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #e3f2fd, #fce4ec);
+            min-height: 100vh;
+        }
+        .btn-gradient {
+            background: linear-gradient(to right, #0d6efd, #6610f2);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            transition: 0.3s ease;
+        }
+        .btn-gradient:hover {
+            opacity: 0.9;
+        }
+        .form-wrapper {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+        }
+        .form-inline-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            color : blue;
+        }
+        .form-inline-group label {
+            min-width: 180px;
+            margin-right: 10px;
+            font-weight: 500;
+        }
+        .form-inline-group input {
+            flex: 1;
+        }
+        h2 {
+            color: #0d6efd;
+            font-weight: 700;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="form-wrapper">
+                    <h2>Edit My Hotel</h2>
+                    <form method="post" th:action="@{/manager/hotels/edit/{id}(id=${hotel.id})}" th:object="${hotel}">
+                        <div class="form-inline-group">
+                            <label for="name">Hotel Name:</label>
+                            <input class="form-control" id="name" type="text" th:field="*{name}" placeholder="Enter hotel name">
+                        </div>
+                        <input type="hidden" th:field="*{addressDTO.id}">
+
+                        <div class="form-inline-group">
+                            <label for="addressLine">Address Line:</label>
+                            <input class="form-control" id="addressLine" type="text" th:field="*{addressDTO.addressLine}" placeholder="Enter address line">
+                        </div>
+
+                        <div class="form-inline-group">
+                            <label for="city">City:</label>
+                            <input class="form-control" id="city" type="text" th:field="*{addressDTO.city}" placeholder="Enter city">
+                        </div>
+
+                        <div class="form-inline-group">
+                            <label for="country">Country:</label>
+                            <input class="form-control" id="country" type="text" th:field="*{addressDTO.country}" placeholder="Enter country">
+                        </div>
+
+                        <!-- Single Room Count -->
+                        <input type="hidden" th:field="*{roomDTOs[0].id}">
+                        <div class="form-inline-group">
+                            <label for="singleRoomCount">Single Room Count:</label>
+                            <input class="form-control" id="singleRoomCount" type="number" th:field="*{roomDTOs[0].roomCount}" placeholder="Enter count for single rooms">
+                        </div>
+                        <div class="form-inline-group">
+                            <label for="singleRoomPrice">Single Room Price (₹):</label>
+                            <input class="form-control" id="singleRoomPrice" type="number" step="0.01" th:field="*{roomDTOs[0].pricePerNight}" placeholder="Enter price for single rooms">
+                        </div>
+
+                        <!-- Double Room Count -->
+                        <input type="hidden" th:field="*{roomDTOs[1].id}">
+                        <div class="form-inline-group">
+                            <label for="doubleRoomCount">Double Room Count:</label>
+                            <input class="form-control" id="doubleRoomCount" type="number" th:field="*{roomDTOs[1].roomCount}" placeholder="Enter count for double rooms">
+                        </div>
+                        <div class="form-inline-group">
+                            <label for="doubleRoomPrice">Double Room Price (₹):</label>
+                            <input class="form-control" id="doubleRoomPrice" type="number" step="0.01" th:field="*{roomDTOs[1].pricePerNight}" placeholder="Enter price for double rooms">
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-gradient px-4">Update Hotel</button>
+                            <a th:href="@{/manager/hotels}" class="btn btn-secondary ms-2">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout-main}">
+<head>
+    <title>Customer Edit Account</title>
+    <style>
+        .btn-gradient {
+            background: linear-gradient(to right, #0d6efd, #6610f2);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            transition: 0.3s ease;
+        }
+        .btn-gradient:hover {
+            opacity: 0.9;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #343a40;
+        }
+        .card-style {
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+        }
+        .card-header {
+            background: linear-gradient(to right, #0d6efd, #6610f2);
+            color: white;
+            text-align: center;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card card-style">
+                    <div class="card-header">
+                        <h2 class="mb-0">Edit Account Details</h2>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="post" th:action="@{/customer/account/edit}" th:object="${user}">
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="username">Email Address</label>
+                                <input class="form-control" id="username" type="email" th:field="*{username}"
+                                       placeholder="Enter email address" required>
+                                <p class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="name">First Name</label>
+                                <input class="form-control" id="name" type="text" th:field="*{name}"
+                                       placeholder="Enter first name" required>
+                                <p class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="lastName">Last Name</label>
+                                <input class="form-control" id="lastName" type="text" th:field="*{lastName}"
+                                       placeholder="Enter last name" required>
+                                <p class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></p>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn btn-gradient px-4">Update</button>
+                                <a th:href="@{/customer/account}" class="btn btn-outline-secondary px-4">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

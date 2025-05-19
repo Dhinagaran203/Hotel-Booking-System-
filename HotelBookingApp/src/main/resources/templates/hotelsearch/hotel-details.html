@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout-main}">
+<head>
+    <title>Hotel Details</title>
+
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+
+    <style>
+        /* page background */
+        body{
+            background:linear-gradient(to right,#e3f2fd,#fce4ec);
+            min-height:100vh;
+        }
+        /* headings */
+        h3,h4{
+            color:#0d6efd;
+            font-weight:700;
+        }
+        /* table wrapper */
+        .details-card{
+            background:#fff;
+            border-radius:15px;
+            padding:25px;
+            box-shadow:0 0 8px rgba(0,0,0,.05);
+        }
+        /* gradient button */
+        .btn-gradient{
+            background:linear-gradient(to right,#0d6efd,#6610f2);
+            color:#fff;
+            border:none;
+            border-radius:25px;
+            transition:.3s;
+        }
+        .btn-gradient:hover{opacity:.9}
+        /* availability chevron */
+        .arrow{color:#0d6efd;font-weight:800}
+    </style>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="container py-5">
+        <!-- Top section -->
+        <div class="row align-items-stretch mb-4">
+            <div class="col-md-6">
+                <h3 th:text="${hotel.name}">Hotel Name</h3>
+                <p class="mb-1" th:text="${hotel.addressDTO.addressLine}">Address Line</p>
+                <p class="mb-0 fw-semibold"
+                   th:text="${hotel.addressDTO.city + ', ' + hotel.addressDTO.country}">City, Country</p>
+            </div>
+            <div class="col-md-6">
+                <div id="map" class="border bg-light rounded" style="min-height:300px;"></div>
+            </div>
+        </div>
+
+        <div class="details-card">
+            <!-- Availability -->
+            <div class="mb-4">
+                <h4>Availability</h4>
+                <p class="fs-5">
+                    <span th:text="${checkinDate}"></span>
+                    <span class="mx-2 arrow">&raquo;&raquo;</span>
+                    <span th:text="${checkoutDate}"></span>
+                </p>
+            </div>
+
+            <!-- Room selection table -->
+            <form action="/booking/initiate" method="post" id="booking-form">
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Room Type</th>
+                            <th>Guests</th>
+                            <th>
+                                Price for <span th:text="${durationDays}"></span> Night(s)
+                            </th>
+                            <th>Select</th>
+                            <th class="text-center">Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="room,iter:${hotel.roomDTOs}">
+                            <td th:text="${room.roomType.name()}">Room Type</td>
+                            <td class="text-center">
+                                <span th:if="${room.roomType.name()=='SINGLE'}"><i class="bi bi-person-fill"></i></span>
+                                <span th:if="${room.roomType.name()=='DOUBLE'}"><i class="bi bi-person-fill"></i><i class="bi bi-person-fill"></i></span>
+                            </td>
+                            <td th:utext="'₹ '+${#numbers.formatDecimal(room.pricePerNight*durationDays,0,'COMMA',2,'POINT')}"></td>
+                            <td>
+                                <select class="form-select room-select"
+                                        th:data-duration-price="${room.pricePerNight*durationDays}">
+                                    <option th:each="n:${#numbers.sequence(0, room.roomType.name()=='SINGLE'? hotel.maxAvailableSingleRooms : hotel.maxAvailableDoubleRooms)}"
+                                            th:value="${n}" th:text="${n}"></option>
+                                </select>
+                                <input type="hidden" th:name="${'roomSelections['+iter.index+'].roomType'}"
+                                       th:value="${room.roomType.name()}"/>
+                                <input type="hidden" th:name="${'roomSelections['+iter.index+'].count'}"
+                                       value="0" id="roomCountInput"/>
+                            </td>
+                            <!-- Total column rendered once -->
+                            <td th:if="${iter.index==0}" th:attr="rowspan=${#lists.size(hotel.roomDTOs)}" class="text-center">
+                                <div class="mb-3">
+                                    <h5 class="mb-1">Grand Total</h5>
+                                    <div id="totalPrice" class="fs-5">₹ 0.00</div>
+                                </div>
+                                <button type="button" id="reserve-button"
+                                        class="btn btn-gradient w-100" disabled>Reserve</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Hidden fields -->
+                <input type="hidden" id="totalPriceInput" name="totalPrice"/>
+                <input type="hidden" name="hotelId" th:value="${hotel.id}"/>
+                <input type="hidden" name="checkinDate" th:value="${checkinDate}"/>
+                <input type="hidden" name="checkoutDate" th:value="${checkoutDate}"/>
+                <input type="hidden" name="durationDays" th:value="${durationDays}"/>
+            </form>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="additional-scripts">
+    <!-- Leaflet map init -->
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        document.addEventListener("DOMContentLoaded", () => {
+            const address = /*[['${hotel.addressDTO.addressLine}, ${hotel.addressDTO.city}, ${hotel.addressDTO.country}']]*/ '';
+            const map  = L.map('map').setView([20.59,78.96],5);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        {attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
+              .then(r=>r.json())
+              .then(d=>{
+                  if(d.length){
+                      const [lat,lon]=[parseFloat(d[0].lat),parseFloat(d[0].lon)];
+                      map.setView([lat,lon],15);
+                      L.marker([lat,lon]).addTo(map).bindPopup(address).openPopup();
+                  }
+              }).catch(console.error);
+        });
+        /*]]>*/
+    </script>
+
+    <!-- Price calculation -->
+    <script>
+        $(function(){
+            const selects = $(".room-select"), btn=$("#reserve-button");
+            function format(p){return "₹ "+p.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,",");}
+            function calc(){
+                let total=0;
+                selects.each(function(){
+                    total += $(this).data("duration-price") * parseInt($(this).val());
+                });
+                $("#totalPrice").text(format(total));
+                $("#totalPriceInput").val(total.toFixed(2));
+                btn.prop("disabled", total===0);
+            }
+            selects.on("change",function(){
+                $(this).siblings("#roomCountInput").val($(this).val());
+                calc();
+            });
+            btn.on("click",()=>$("#booking-form").submit());
+            calc();
+        });
+    </script>
+</th:block>
+</body>
+</html>

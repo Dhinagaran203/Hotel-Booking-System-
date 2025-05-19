@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout-main}">
+<head>
+    <title>Search Results</title>
+
+    <style>
+        body{
+            background:url('/img/hotelres.jpeg') center / cover no-repeat fixed;
+            min-height:100vh;
+            font-family:'Arial',sans-serif;
+        }
+
+        h2,h5{
+            color:#0d6efd;
+            font-weight:700;
+        }
+
+        /* Specific black color styling for the search results section */
+        .search-results h2, 
+        .search-results h5 {
+            color: black !important;
+        }
+
+        .summary-table td{
+            padding:.15rem .25rem;
+            border:0!important;
+        }
+
+        .hotel-card{
+            background:#fff;
+            border-radius:15px;
+            box-shadow:0 0 8px rgba(0,0,0,.06);
+        }
+        .hotel-card:hover{
+            box-shadow:0 4px 14px rgba(0,0,0,.12);
+        }
+        .hotel-card .card-body{
+            padding:1rem 1.25rem
+        }
+
+        .btn-gradient{
+            background:linear-gradient(to right,#0d6efd,#6610f2);
+            color:#fff;
+            border:none;
+            border-radius:25px;
+            transition:.3s;
+        }
+
+        .btn-gradient:hover{
+            opacity:.9
+        }
+
+        .price-tag{
+            font-weight:600;
+        }
+
+        .no-result{
+            background:#fff;
+            border-radius:12px;
+            box-shadow:0 0 6px rgba(0,0,0,.05);
+            padding:35px 25px;
+        }
+    </style>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-12">
+
+                <!-- header -->
+                <div class="mb-5 search-results">
+                    <h2>Search results for "<span th:text="${city}">City</span>"</h2>
+                    <table class="summary-table">
+                        <tr><td style="width:140px"><h5>Duration:</h5></td><td><h5><span th:text="${days}">0</span> nights</h5></td></tr>
+                        <tr><td><h5>Check‑in:</h5></td><td><h5 th:text="${checkinDate}"></h5></td></tr>
+                        <tr><td><h5>Check‑out:</h5></td><td><h5 th:text="${checkoutDate}"></h5></td></tr>
+                    </table>
+                </div>
+
+                <!-- no hotels -->
+                <div th:if="${noHotelsFound}" class="no-result text-center mb-5">
+                    <p class="fs-5 mb-3">No hotels found for the selected city or dates.<br>Try different dates or another city.</p>
+                    <a href="/search" class="btn btn-gradient px-4">Back to Search</a>
+                </div>
+
+                <!-- hotel list -->
+                <div th:each="hotel : ${hotels}" class="mb-4">
+                    <div class="card hotel-card">
+                        <div class="row g-0 align-items-stretch">
+
+                            <!-- details (full 10 cols on desktop) -->
+                            <div class="col-md-10 col-12">
+                                <div class="card-body">
+                                    <h5 class="mb-3" th:text="${hotel.name}">Hotel Name</h5>
+
+                                    <div class="row">
+                                        <!-- available rooms -->
+                                        <div class="col-6 mb-2">
+                                            <p class="fw-bold mb-1">Available Rooms</p>
+                                            <div class="d-flex justify-content-between">
+                                                <span>Single:</span>
+                                                <span th:text="${hotel.maxAvailableSingleRooms}">0</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <span>Double:</span>
+                                                <span th:text="${hotel.maxAvailableDoubleRooms}">0</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- pricing -->
+                                        <div class="col-6 mb-2">
+                                            <p class="fw-bold mb-1">Price / night</p>
+                                            <th:block th:each="room:${hotel.roomDTOs}">
+                                                <div th:if="${room.roomType.name()=='SINGLE'}">
+                                                    <span class="price-tag">₹
+                                                        <span th:text="${room.pricePerNight}"></span>
+                                                    </span> (Single)
+                                                </div>
+                                                <div th:if="${room.roomType.name()=='DOUBLE'}">
+                                                    <span class="price-tag">₹
+                                                        <span th:text="${room.pricePerNight}"></span>
+                                                    </span> (Double)
+                                                </div>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- action -->
+                            <div class="col-md-2 col-12 d-flex align-items-center justify-content-center p-3">
+                                <a th:href="@{/hotel-details/{id}(id=${hotel.id},checkinDate=${checkinDate},checkoutDate=${checkoutDate})}"
+                                   class="btn btn-gradient w-100">Book Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

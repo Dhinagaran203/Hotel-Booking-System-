@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout-main}">
+<head>
+    <title>Search Hotel</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #f5f7fa, #c3cfe2);
+        }
+
+        .card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+
+        .card-header {
+            background-color: #ffffff;
+            border-bottom: none;
+        }
+
+        h2 {
+            font-weight: 600;
+            color: #343a40;
+        }
+
+        .form-label {
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        input::placeholder {
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="mb-4">
+                    <img class="img-fluid rounded shadow" src="/img/map-banner.jpg" alt="Map Banner">
+                </div>
+
+                <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+                <div class="card p-4">
+                    <div class="card-header text-center">
+                        <h2>Search for Hotels</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" th:action="@{/search}" th:object="${hotelSearchDTO}">
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="city">City</label>
+                                <input class="form-control" id="city" type="text" th:field="*{city}" placeholder="Enter city" autofocus>
+                                <p class="text-danger" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></p>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="checkinDate">Check-in Date</label>
+                                <input class="form-control" id="checkinDate" type="text" th:field="*{checkinDate}" placeholder="Select date">
+                                <p class="text-danger" th:if="${#fields.hasErrors('checkinDate')}" th:errors="*{checkinDate}"></p>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="checkoutDate">Check-out Date</label>
+                                <input class="form-control" id="checkoutDate" type="text" th:field="*{checkoutDate}" placeholder="Select date">
+                                <p class="text-danger" th:if="${#fields.hasErrors('checkoutDate')}" th:errors="*{checkoutDate}"></p>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary w-50">Search</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="additional-scripts">
+    <script>
+        $(document).ready(function () {
+            const displayFormat = "dd.mm.yy";
+            const submitFormat = "yy-mm-dd";
+
+            $("#city").on("input", function () {
+                var value = $(this).val();
+                var filteredValue = value.replace(/[^A-Za-z\s'-]/g, "");
+                $(this).val(filteredValue);
+            });
+
+            $("#checkinDate").datepicker({
+                dateFormat: displayFormat,
+                minDate: 0,
+                onClose: function (selectedDate) {
+                    if (selectedDate) {
+                        var checkoutMinDate = $.datepicker.parseDate(displayFormat, selectedDate);
+                        checkoutMinDate.setDate(checkoutMinDate.getDate() + 1);
+                        $("#checkoutDate").datepicker("option", "minDate", checkoutMinDate);
+                    }
+                }
+            }).attr('readonly', 'readonly');
+
+            $("#checkoutDate").datepicker({
+                dateFormat: displayFormat,
+                minDate: +1
+            }).attr('readonly', 'readonly');
+
+            $("form").on("submit", function () {
+                var checkinDate = $('#checkinDate').datepicker('getDate');
+                var checkoutDate = $('#checkoutDate').datepicker('getDate');
+                $('#checkinDate').val($.datepicker.formatDate(submitFormat, checkinDate));
+                $('#checkoutDate').val($.datepicker.formatDate(submitFormat, checkoutDate));
+            });
+        });
+    </script>
+</th:block>
+</body>
+</html>

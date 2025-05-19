@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout-main}">
+<head>
+    <title>Manager Dashboard</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #e3f2fd, #fce4ec);
+            min-height: 100vh;
+        }
+        .btn-gradient {
+            background: linear-gradient(to right, #0d6efd, #6610f2);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 8px 20px;
+            transition: 0.3s ease;
+        }
+        .btn-gradient:hover {
+            opacity: 0.9;
+        }
+        .dashboard-card {
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+            background-color: #ffffff;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+        .card-icon {
+            font-size: 3rem;
+            color: #0d6efd;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="container py-5">
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-4">
+                <div class="card dashboard-card text-center p-4">
+                    <i class="bi bi-plus-square-dotted card-icon"></i>
+                    <h5 class="card-title mb-3">Add Hotel</h5>
+                    <a th:href="@{/manager/hotels/add}" class="btn btn-gradient">Go</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card dashboard-card text-center p-4">
+                    <i class="bi bi-building card-icon"></i>
+                    <h5 class="card-title mb-3">My Hotels</h5>
+                    <a th:href="@{/manager/hotels}" class="btn btn-gradient">Go</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card dashboard-card text-center p-4">
+                    <i class="bi bi-calendar-check card-icon"></i>
+                    <h5 class="card-title mb-3">Hotel Bookings</h5>
+                    <a th:href="@{/manager/bookings}" class="btn btn-gradient">Go</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>
